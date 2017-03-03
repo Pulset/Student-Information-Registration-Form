@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Information Registration Form</title>
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body>
+  <div id="app">
+      <list-template></list-template>
+  </div>
+
+  <template id="list-template">
+  <div>
+     <table>
+        <thead>
+          <tr >
+            <th v-for='col in column' v-bind:class=['title']>
+              {{col.name}}
+            </th>
+            <th v-bind:class=['title']>
+            Delete  
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for='(person,index) in people'>
+            <td v-for='col in column'>
+              <!-- {{person[col.name]}} -->
+              <span v-if='col.isKey' v-on:click='openEdit(index)'><a href="javascript:void(0)">{{person[col.name]}}</a></span>
+              <span v-else>{{person[col.name]}}</span>
+            </td>
+            <td>
+              <button v-on:click='del(index)'>Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button v-on:click='creatItem'>Creat</button>
+      <dialog-template v-bind:show='showDialog' v-bind:columns='column' v-bind:title='title' v-bind:mode='mode'></dialog-template>
+  </div>
+  </template>
+
+  <template id="dialog-template">
+  <div class="container">
+    <div class="dialog" v-show='show' >
+      <div class="title head">{{title}}</div>
+      <div class="content" v-for='col in columns'>
+      <label>{{col.name}}</label>
+      <select  v-if='col.dataSource' v-model='item[col.name]'>
+        <option v-for='opt in col.dataSource' v-on:value='opt'>{{opt}}</option>
+      </select >
+      <input v-else type="text" v-model='item[col.name]' v-on:keyup.enter='save'>
+      </div>
+      <div class="footer"><button v-on:click='save'>Save</button><button v-on:click='close'>Close</button></div>
+    </div>
+    <div v-bind:class="{'overlay':show}"></div>
+  </div>
+  </template>
+</body>
+<script type="text/javascript" src='javascript/vue.js'></script>
+<script type="text/javascript" src='javascript/index.js'></script>
+</html>
